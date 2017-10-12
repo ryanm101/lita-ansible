@@ -1,0 +1,5 @@
+lita_name: Lita
+lita_home: /srv/litabot
+lita_slack_token: 408123984201983401284294812098402cxvd
+redis_srv: 127.0.0.1
+redis_port: 6379

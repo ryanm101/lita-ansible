@@ -1,0 +1,48 @@
+---
+- name: Install Ruby Version Manager Keys
+  command: "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+
+- name: Get Ruby Version Manager
+  get_url: url=https://get.rvm.io dest=/tmp/rvm.sh mode=0755
+
+- name: Install Ruby Version Manager
+  command: "bash /tmp/rvm.sh stable --ruby"
+
+- name: Install Ruby
+  command: "rvm install ruby-2.4.1"
+
+- name: Create Lita Group
+  group: name=lita
+
+- name: Create Lita User
+  user: name=lita group=lita home="{{ lita_home }}" createhome=yes
+
+- name: Install Lita Gem
+  command: gem install lita
+
+- name: Install Lita-slack Gem
+  command: gem install lita-slack
+
+- name: Setup Lita
+  command: lita new
+  args:
+    chdir: "{{ lita_home }}"
+  become: yes
+  become_user: lita
+  become_method: su
+  become_flags: '-'
+
+- name: Copy Lita Gemfile
+  template: src=Gemfile dest="{{ lita_home }}/lita"
+
+- name: Copy Lita config file
+  template: src=lita_config.rb dest="{{ lita_home }}/lita"
+
+- name: Get Lita Deps
+  command: bundle install
+  args:
+    chdir: "{{ lita_home }}/lita"
+  become: yes
+  become_user: lita
+  become_method: su
+  become_flags: '-'

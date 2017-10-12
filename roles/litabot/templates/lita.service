@@ -1,0 +1,13 @@
+[Unit]
+Description=My Lita instance
+Requires=redis.service
+After=redis.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+WorkingDirectory={{ lita_home }}/lita
+ExecStart=nohup bundle exec lita & 
+
+[Install]
+WantedBy=multi-user.target
