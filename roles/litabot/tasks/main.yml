@@ -28,7 +28,7 @@
   args:
     chdir: "{{ lita_home }}"
   become: yes
-  become_user: {{ lita_user }}
+  become_user: "{{ lita_user }}"
   become_method: su
   become_flags: '-'
 
@@ -43,7 +43,7 @@
   args:
     chdir: "{{ lita_home }}/{{ lita_name }}"
   become: yes
-  become_user: {{ lita_user }}
+  become_user: "{{ lita_user }}"
   become_method: su
   become_flags: '-'
 
