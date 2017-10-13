@@ -12,10 +12,10 @@
   command: "rvm install ruby-2.4.1"
 
 - name: Create Lita Group
-  group: name=lita
+  group: name={{ lita_group }}
 
 - name: Create Lita User
-  user: name=lita group=lita home="{{ lita_home }}" createhome=yes
+  user: name={{ lita_user }} group={{ lita_group }} home="{{ lita_home }}" createhome=yes
 
 - name: Install Lita Gem
   command: gem install lita
@@ -24,25 +24,33 @@
   command: gem install lita-slack
 
 - name: Setup Lita
-  command: lita new
+  command: lita new {{ lita_name }}
   args:
     chdir: "{{ lita_home }}"
   become: yes
-  become_user: lita
+  become_user: {{ lita_user }}
   become_method: su
   become_flags: '-'
 
 - name: Copy Lita Gemfile
-  template: src=Gemfile dest="{{ lita_home }}/lita"
+  template: src=Gemfile dest="{{ lita_home }}/{{ lita_name }}"
 
 - name: Copy Lita config file
-  template: src=lita_config.rb dest="{{ lita_home }}/lita"
+  template: src=lita_config.rb dest="{{ lita_home }}/{{ lita_name }}"
 
 - name: Get Lita Deps
   command: bundle install
   args:
-    chdir: "{{ lita_home }}/lita"
+    chdir: "{{ lita_home }}/{{ lita_name }}"
   become: yes
-  become_user: lita
+  become_user: {{ lita_user }}
   become_method: su
   become_flags: '-'
+
+- name: Create Systemd 
+  template: src=lita.service dest="/etc/systemd/system//lita_{{ lita_name }}.service"
+
+- name: Start {{ lita_name }}
+  service: name="lita_{{ lita_name }}.service" state=started enabled=yes
+
+

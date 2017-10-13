@@ -1,13 +1,17 @@
 [Unit]
-Description=My Lita instance
+Description={{ lita_name }} instance
 Requires=redis.service
 After=redis.service
 
 [Service]
-TimeoutStartSec=0
+Type=simple
+User={{ lita_user }}
+Group={{ lita_group }}
+WorkingDirectory={{ lita_home }}/{{ lita_name }}
+ExecStart=/usr/bin/bash -lc 'bundle exec lita'
+TimeoutSec=30
+RestartSec=15
 Restart=always
-WorkingDirectory={{ lita_home }}/lita
-ExecStart=nohup bundle exec lita & 
 
 [Install]
 WantedBy=multi-user.target

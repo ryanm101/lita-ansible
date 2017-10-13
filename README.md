@@ -6,5 +6,3 @@ Run playbook with:
 	ansible-playbook -i "localhost," lita.yml
 
 ### TODO
-
-- lita.service file is not working

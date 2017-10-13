@@ -1,3 +1,5 @@
+lita_user: lita
+lita_group: lita
 lita_name: Lita
 lita_home: /srv/litabot
 lita_slack_token: 408123984201983401284294812098402cxvd
